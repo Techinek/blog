@@ -5,6 +5,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from .forms import PostForm
 
 from .models import Post
 
@@ -21,26 +22,30 @@ class PostDetailView(DetailView):
 
 class PostCreateView(CreateView):
     """A class to create a single post"""
+    form_class = PostForm
     model = Post
-    fields = [
-        'title',
-        'content',
-        'thumbnail',
-        'author',
-        'slug',
-    ]
+    success_url = '/'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'view_type': 'Create'
+        })
+        return context
 
 class PostUpdateView(UpdateView):
     """A class to update a single post"""
+    form_class = PostForm
     model = Post
-    fields = [
-        'title',
-        'content',
-        'thumbnail',
-        'author',
-        'slug',
-    ]
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'view_type': 'Update'
+        })
+        return context
+
 
 class PostDeleteView(DeleteView):
     """A class to delete a single post"""
