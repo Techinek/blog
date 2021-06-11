@@ -1,7 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        {{ object.title }}
+    <div class="row">
+        <div class="col-4 offset-4">
+            <div class="card p-1 ps-4 pe-4">
+                <h1 class="p-1 ps-4 pe-4">{{ object.title }}</h1>
+                <img src="{{ object.thumbnail.url }}" alt="{{ object.title }}">
+                <hr>
+                <div>
+                    <span><i class="bi bi-eye ml-2"></i> {{ object.get_view_count }}</span>
+                    <span><i class="bi bi-hand-thumbs-up ml-2"></i> {{ object.get_like_count }}</span>
+                    <span><i class="bi bi-chat ml-2"></i> {{ object.get_comment_count }}</span>
+                    <span class="float-end">Posted: {{ object.publish_date|timesince }} ago</span>
+                </div>
+                <hr>
+                <div>
+                    <p>{{ object.content }}</p>
+                </div>
+                {% if request.user.is_authenticated %}
+                    <div>
+                        <h5>Like this post</h5>
+                        <a class="text-muted" href="{{ object.get_like_url }}"><i class="bi bi-hand-thumbs-up fs-4"></i></a>
+                    </div>
+                    <hr>
+                    <h4>Leave a comment below</h4>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-primary" type="submit">Comment</button>
+                    </form>
+                    <hr>
+                    <h5>Comments</h5>
+                    {% for comment in object.comment_set.all %}
+                        <div>
+                            <p>
+                                {{ comment.content }}
+                                <br>
+                                <small>{{ comment.timestamp|timesince }} ago</small>
+                            </p>
+
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% else %}
+                    <a class="btn btn-primary btn-block" href="{% url 'account_login' %}">Login to comment</a>
+                {% endif %}
+            </div>
+        </div>
     </div>
+
 {% endblock content %}

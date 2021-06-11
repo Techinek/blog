@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.urls import reverse
+from django.shortcuts import reverse
 
 
 class User(AbstractUser):
@@ -28,6 +28,23 @@ class Post(models.Model):
         return reverse('detail', kwargs={
             'slug': self.slug
         })
+
+    def get_like_url(self):
+        return reverse('like', kwargs={
+            'slug': self.slug
+        })
+
+    @property
+    def get_comment_count(self):
+        return self.comment_set.all().count()
+
+    @property
+    def get_view_count(self):
+        return self.postview_set.all().count()
+
+    @property
+    def get_like_count(self):
+        return self.like_set.all().count()
 
 
 class Comment(models.Model):
