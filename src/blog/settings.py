@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+    'crispy_forms',
+
     'posts',
 ]
 
@@ -143,3 +145,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 SITE_ID = 1
 AUTH_USER_MODEL = 'posts.User'
+
+# crispy form css framework
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
